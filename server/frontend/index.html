@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+             <span>HTTP Methods</span>
+             <ul>
+                <li>Regular</li>
+                <li>Javascript</li>
+             </ul>
+
+        </div>
+        <div class="form-container">
+
+            <form class="form" action="/login" method="POST">
+                <p>Javascript Form</p>
+                <p>Enter Name</p>
+                
+                <div class="submit">
+                <input type="text" id="name" name="name"> 
+                <button type="submit" id="submit-btn">Submit</button>
+                <input type="text" id="id">
+                <button type="submit" id="update">Updat</button>
+                </div>
+            </form>
+
+            <div class="result"></div>
+        </div>
+
+        
+    </div>
+    
+    <script>
+        const result = document.querySelector('.result')
+        const updateBtn = document.getElementById('update')
+        const id = document.getElementById('id')
+
+        const fetchPeople = async () => {
+            try {
+                const people = await fetch('/api/people')
+                const {data} = await people.json() 
+                
+                result.innerHTML = data.map(person => `<div>${person.name}</div>`).join('')
+            } catch (err) {
+                result.innerHTML = `<div class="alert">cant fetch data</div>`
+            }
+        }
+
+        fetchPeople()
+
+         const btn = document.querySelector('#submit-btn')
+        const input = document.querySelector('#name')
+        
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault() 
+            const nameValue = input.value
+
+            try {
+                const response = await fetch('/api/people', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({name: nameValue})
+                })
+                const data = await response.json();
+                const people =  data.data.name
+
+                const div = document.createElement('div')
+                div.textContent = people;
+                result.appendChild(div)
+            } catch (err) {
+                result.innerHTML = err
+            }
+            input.value= ''
+            
+        })
+
+        updateBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const id = Number(id.value)
+            const nameValue = input.value
+
+            try{
+                const response = await fetch(`/api/people/${id}`,{
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({name: nameValue})
+                } )
+                const data = await response.json()
+                fetchPeople()
+                
+            }catch(err) {
+                result.innerHTML = err
+            }
+        })
+    </script>
+</body>
+</html>
