@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express() 
-const {people} = require('./data')
+let {people} = require('./data')
+
 app.use(express.static('node-js/server/frontend'))
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
@@ -36,6 +37,16 @@ app.put('/api/people/:id', (req,res) => {
     // })
     person.name = name
     res.json(person)
+})
+
+app.delete('/api/people/:id', (req,res)=> {
+    const person = people.find((person) => person.id === Number(req.params.id))
+    if(!person) {
+        res.status(404).json({success:false, msg:'no person with id'})
+    }
+
+     people = people.filter((person) => person.id !== Number(req.params.id))
+    res.json(people)
 })
 
 app.post('/login', (req, res) => {

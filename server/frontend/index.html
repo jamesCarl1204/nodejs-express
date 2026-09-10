@@ -25,8 +25,10 @@
                 <div class="submit">
                 <input type="text" id="name" name="name"> 
                 <button type="submit" id="submit-btn">Submit</button>
+                <label>ID</label>
                 <input type="text" id="id">
                 <button type="submit" id="update">Updat</button>
+                <button type="submit" id="deleteBtn">delete</button>
                 </div>
             </form>
 
@@ -39,7 +41,8 @@
     <script>
         const result = document.querySelector('.result')
         const updateBtn = document.getElementById('update')
-        const id = document.getElementById('id')
+        const idInput = document.getElementById('id')
+        const deleteBtn = document.getElementById('deleteBtn')
 
         const fetchPeople = async () => {
             try {
@@ -85,7 +88,7 @@
         updateBtn.addEventListener('click', async (e) => {
             e.preventDefault();
 
-            const id = Number(id.value)
+            const id = Number(idInput.value)
             const nameValue = input.value
 
             try{
@@ -97,11 +100,32 @@
                     body: JSON.stringify({name: nameValue})
                 } )
                 const data = await response.json()
+                
                 fetchPeople()
                 
             }catch(err) {
                 result.innerHTML = err
             }
+        })
+
+        deleteBtn.addEventListener('click', async (e) => {
+            e.preventDefault();
+             const id = Number(idInput.value)
+            try {
+                const response = await fetch(`/api/people/${id}`, {
+                    method: 'DELETE',
+                    header: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                const data = await response.json()
+                console.log(data)
+
+                fetchPeople()
+            } catch (err) {
+                result.innerHTML = err
+            }
+
         })
     </script>
 </body>
