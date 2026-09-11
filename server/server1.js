@@ -11,6 +11,7 @@ app.get('/api/products', (req,res) => {
 
     res.status(200).send(products)
 })
+
 app.get('/api/products/:productID', (req, res) => {
     console.log(req.params)
 
@@ -22,6 +23,7 @@ app.get('/api/products/:productID', (req, res) => {
    }
     res.json(singleproduct)
 })
+
 
 app.get('/api/products/:productID/reviews/:reviewID', (req, res) => {
     res.send('hello')

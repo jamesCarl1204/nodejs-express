@@ -17,6 +17,7 @@ const EventEmitter = require('events');
 
     let path;
 
+    
     if(req.url === '/' || req.url === 'index.html') {
         res.statusCode = 200;
         res.se
