@@ -1,0 +1,60 @@
+body {
+    font-size: 1.2rem;
+    margin: 0
+}
+* { 
+}
+
+.container {
+    height: 100vh;
+    width: auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap:10px;
+    background-color: rgba(0,0,0,0.2);
+
+}
+
+.input-container {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 500px;
+    padding: 10px;
+    margin-top: 100px;
+    border-radius: 10px;
+    padding: 30px;
+}
+.output {
+    width: 100%;
+    padding: 10px;
+    height:500px;
+    display: grid;
+    justify-content: center;
+    gap: 15px;
+    grid-template-rows: 50px 50px
+}
+
+.task {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    background:white;
+    
+    width: 400px;
+    padding: 20px;
+    box-sizing: border-box
+}
+
+.input-container input {
+    width: 300px;
+    height: 30px
+}
+
+.input-container button {
+    width: 90px;
+    height:30px
+}
