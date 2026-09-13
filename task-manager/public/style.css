@@ -32,10 +32,13 @@ body {
     width: 100%;
     padding: 10px;
     height:500px;
-    display: grid;
-    justify-content: center;
-    gap: 15px;
-    grid-template-rows: 50px 50px
+    display:grid;
+    align-items: center;
+    /*flex-direction: column;
+   background-color: yellow;**/
+   grid-auto-rows: 50px;
+    gap: 10px;
+    flex-wrap: nowrap
 }
 
 .task {
