@@ -1,6 +1,8 @@
 let mysql = require('mysql2')
 const express = require('express')
 const app = express()
+const path = require('path')
+require('dotenv').config({path:path.join(__dirname, '/.env')})
 
 app.use(express.json())
 app.use(express.static('./node-js/CRUD/app'))
@@ -41,7 +43,17 @@ app.delete('/api/students/:id', (req,res) => {
     
     con.query(`DELETE FROM students WHERE id = ?`,[id], (err, result) => {
         if(err) return res.status(400).json({success: false, msg:err})
-            res.json({success: true, msg:'Deleted successfully'})
+            res.status(200).json({success: true, msg:'Deleted successfully'})
+    })
+})
+
+app.put('/api/students/:id', (req, res) => {
+    const {id} = req.params;
+    const {data} = req.body
+
+    con.query(`UPDATE students SET name = ? WHERE id = ? `, [id,data], (err, result) => {
+        if(err) return res.status(400).json({success: false, msg:err})
+            res.status(200).json({success: true, msg:'Successfully updated'})
     })
 })
 app.listen(3000)
