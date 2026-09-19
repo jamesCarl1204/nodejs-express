@@ -63,8 +63,8 @@
     padding: 40px
 }
 
-form h1 {
-    font-size:2.4rem;
+form h3 {
+    font-size:2.4em;
     font-weight: 900;
     margin-bottom: 40px
 }
@@ -79,6 +79,7 @@ form h1 {
 label {
     display:block;
     margin: 20px 0 10px;
+    font-size: 1rem
 }
 button {
     margin-top: 30px;

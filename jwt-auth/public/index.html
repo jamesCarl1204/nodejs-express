@@ -11,8 +11,8 @@
 
     <nav class="nav-container">
         <ul>
-            <li><a>Login</a></li>
-            <li><a>sign in</a></li>
+            <li><a id="login-btn">Login</a></li>
+            <li><a id="sign-in-btn">sign in</a></li>
         </ul>
     </nav>
 
@@ -31,11 +31,13 @@
 
     <div class="login-signin" id="login-container">
         <form >
+            <h3>Login</h3>
             <label for="email">Email</label>
             <input type="email" name="email" placeholder="email...">
             <label for="password">password</label>
             <input type="password" name="password" placeholder="password">
-            <button>Login</button>
+            <button id="login-submit">Login</button>
+            <button class="back-btn">back</button>
         </form>
 
     </div>
@@ -48,7 +50,8 @@
             <input type="email" placeholder="email...">
             <label for="password">password</label>
             <input type="password" placeholder="password">
-            <button>sign in</button>
+            <button id="sign-in-submit">sign in</button>
+            <button class="back-btn">back</button>
         </form>
 
     </div>
