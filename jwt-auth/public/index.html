@@ -10,6 +10,7 @@
     <diV class="container">
 
     <nav class="nav-container">
+        <span id="user-name">carlo</span>
         <ul>
             <li><a id="login-btn">Login</a></li>
             <li><a id="sign-in-btn">sign in</a></li>
@@ -33,9 +34,11 @@
         <form >
             <h3>Login</h3>
             <label for="email">Email</label>
-            <input type="email" name="email" placeholder="email...">
+            <input type="email" name="email" id="email-login-input" placeholder="email...">
+            <div class="email-error"></div>
             <label for="password">password</label>
-            <input type="password" name="password" placeholder="password">
+            <input type="password" name="password" id="pword-login-input" placeholder="password">
+            <div class="password-error"></div>
             <button id="login-submit">Login</button>
             <button class="back-btn">back</button>
         </form>
@@ -47,9 +50,11 @@
          <form>
             <h1>Sign in</h1>
             <label for="email">Email</label>
-            <input type="email" placeholder="email...">
+            <input type="email" id="email-sign-input" placeholder="email...">
+            <div class="email-error"></div>
             <label for="password">password</label>
-            <input type="password" placeholder="password">
+            <input type="password" id="pword-sign-input" placeholder="password">
+            <div class="password-error"></div>
             <button id="sign-in-submit">sign in</button>
             <button class="back-btn">back</button>
         </form>

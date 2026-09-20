@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="project/style.css">
+</head>
+<body>
+    <div id="container">
+        <nav id="nav-container">
+            <a id="logout-btn">Log Out</a>
+        </nav>
+        <main id="main-page">
+            <div id="project-box">
+                
+            <div class="box1">
+                <div class="box1-thumb"></div>
+                <h3 class="box1-title">Qrcode attendance</h3>
+                <p class="box1-desc">Lorem ipsum dolor sit amet consectetur 
+                    adipisicing elit. Quasi accusamus cupiditate, aspernatur
+                     temporibus molestiae eum, recusandae, exercitationem ea
+                      inventore fugiat odit blanditiis reprehenderit adipisci! 
+                      Commodi, nam. Quidem assumenda est dignissimos.</p>
+            </div>
+            <div class="box1">
+                <div class="box1-thumb"></div>
+                <h3 class="box1-title">Qrcode attendance</h3>
+                <p class="box1-desc">Lorem ipsum dolor sit amet consectetur 
+                    adipisicing elit. Quasi accusamus cupiditate, aspernatur
+                     temporibus molestiae eum, recusandae, exercitationem ea
+                      inventore fugiat odit blanditiis reprehenderit adipisci! 
+                      Commodi, nam. Quidem assumenda est dignissimos.</p>
+
+            </div>
+            <div class="box1">
+                <div class="box1-thumb"></div>
+                <h3 class="box1-title">Qrcode attendance</h3>
+                <p class="box1-desc">Lorem ipsum dolor sit amet consectetur 
+                    adipisicing elit. Quasi accusamus cupiditate, aspernatur
+                     temporibus molestiae eum, recusandae, exercitationem ea
+                      inventore fugiat odit blanditiis reprehenderit adipisci! 
+                      Commodi, nam. Quidem assumenda est dignissimos.</p>
+            </div>
+            <div class="box1">
+                <div class="box1-thumb"></div>
+                <h3 class="box1-title">Qrcode attendance</h3>
+                <p class="box1-desc">Lorem ipsum dolor sit amet consectetur 
+                    adipisicing elit. Quasi accusamus cupiditate, aspernatur
+                     temporibus molestiae eum, recusandae, exercitationem ea
+                      inventore fugiat odit blanditiis reprehenderit adipisci! 
+                      Commodi, nam. Quidem assumenda est dignissimos.</p>
+            </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const logoutBtn = document.getElementById('logout-btn');
+
+        logoutBtn.addEventListener('click', async (e) => {
+            const response = await fetch('/logout', {
+                method: 'GET'
+            })
+            const data = await response.json()
+            
+            if(data.success) {
+                window.location.href = "/"
+            }
+        })
+    </script>
+</body>
+</html>
+

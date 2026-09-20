@@ -9,8 +9,12 @@ const requireAuth = (req, res, next) => {
         jwt.verify(token, 'secret', (err, decodedToken) => {
             if(err) {
                 console.log(err.message);
-                res.redirect('/login')
+            } else {
+                console.log(decodedToken)
+                next()
             }
         })
     }
 }
+
+module.exports = {requireAuth}
