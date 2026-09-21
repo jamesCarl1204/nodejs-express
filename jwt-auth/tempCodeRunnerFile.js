@@ -3,9 +3,6 @@ const path = require('path')
 const authRoutes = require('./routes/authRoutes')
 const app = express();
 const cookieParser = require('cookie-parser')
-const { body, param, query, validationResult} = require('express-validator')
-
-
 
 const {requireAuth, checkUser} = require('./middleware/authMiddleware')
 

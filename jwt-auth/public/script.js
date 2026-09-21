@@ -12,8 +12,12 @@ const emailLoginInput = document.getElementById('email-login-input')
 const passwordSignInput = document.getElementById('pword-sign-input')
 const passwordLoginInput = document.getElementById('pword-login-input')
 const backBtn = document.querySelector('.back-btn')
-const emailErr = document.querySelector('.email-error')
-const passwordErr = document.querySelector('.password-error')
+
+const signupEmailErr = document.querySelector('#sign-in-container .email-error')
+const signupPasswordErr = document.querySelector('#sign-in-container .password-error')
+
+const loginEmailErr = document.querySelector('#login-container .email-error')
+const loginPasswordErr = document.querySelector('#login-container .password-error')
 
 backBtn.addEventListener('click', (e) => {
     loginContainer.style.display = "none";
@@ -27,6 +31,15 @@ loginBtn.addEventListener('click', (e) => {
 signInBtn.addEventListener('click', (e) => {
     signInContainer.style.display = "flex"
 
+})
+
+window.addEventListener('DOMContentLoaded', async () => {
+    const response = await fetch('/api/me')
+    const data =await response.json();
+
+    if(data.user) {
+        document.getElementById('user-name').textContent = data.user.email
+    }
 })
 
 signInSubmit.addEventListener('click', async (e) => {
@@ -43,10 +56,14 @@ signInSubmit.addEventListener('click', async (e) => {
     const data = await response.json()
 
     if(data.errors) {
-        emailErr.textContent = data.errors.email;
-        passwordErr.textContent = data.errors.password
+        signupEmailErr.textContent = ''
+        signupEmailErr.textContent = ''
+       data.errors.forEach(err => {
+         if(err.path === 'email') signupEmailErr.textContent = err.msg
+         if(err.path === 'password') signupPasswordErr.textContent = err.msg
+    })
     }
-    console.log(data.user)
+    
     if(data.user){
         signInContainer.style.display = "none"
     }
@@ -62,7 +79,7 @@ loginSubmit.addEventListener('click', async (e) => {
 
     const email = emailLoginInput.value;
     const password = passwordLoginInput.value;
-
+    try {
     const response = await fetch('/login', {
         method: 'POST',
         headers: {'Content-Type' : 'application/json'},
@@ -72,16 +89,33 @@ loginSubmit.addEventListener('click', async (e) => {
     const data = await response.json()
 
     if(data.errors) {
-        emailErr.textContent = data.errors.email
-        passwordErr.textContent= data.errors.password
+        data.errors.forEach(err => {
+            if (err.path === 'email')  loginEmailErr.textContent = err.msg
+            if(err.path === 'password') loginPasswordErr.textContent= err.msg
+        })
+      
     }
 
     if(data.user) {
-        window.location.href = '/projects'
+        window.location.href = '/'
     }
+}catch(err) {
+    console.log(err)
+}
 })
 
-projectBtn.addEventListener('click', (e) => {
-   loginContainer.style.display = "flex"
+
+
+projectBtn.addEventListener('click', async (e) => {
+    const response = await fetch('/api/me',{
+        method:'GET'
+    })
+    const data = await response.json();
+
+    if(data.user) {
+        window.location.href = '/projects'
+    } else {
+        loginContainer.style.display = 'flex'
+    }
 })
 

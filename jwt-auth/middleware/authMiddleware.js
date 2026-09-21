@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const {con} =require('../config/db')
+const {pool} =require('../config/db')
 
 const requireAuth = (req, res, next) => {
     
@@ -15,6 +15,32 @@ const requireAuth = (req, res, next) => {
             }
         })
     }
+    // else {
+    //     res.redirect('/login')
+    // }
+
 }
 
-module.exports = {requireAuth}
+const checkUser = (req, res,next) => {
+    const token = req.cookies.jwt;
+
+    if(token) {
+        jwt.verify(token, 'secret', async (err, decodedToken) => {
+            if(err) {
+                console.log(err)
+                res.locals.user = null
+                next()
+            } else { [rows] = await pool.query('SELECT * FROM users WHERE id = ?', [decodedToken.id])
+                res.locals.user = rows[0]
+                next()
+            
+            }
+        })
+    }
+    else {
+       res.locals.user = null
+       next()
+    }
+}
+
+module.exports = {requireAuth, checkUser}

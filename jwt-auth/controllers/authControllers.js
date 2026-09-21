@@ -1,44 +1,43 @@
 const { pool } = require('../config/db')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-
+const {body, validationResult} = require('express-validator')
 const maxAge = 30 * 24 * 60 * 60;
 
-function isValidEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.com$/.test(email)
-}
+// function isValidEmail(email) {
+//     return /^[^\s@]+@[^\s@]+\.com$/.test(email)
+// }
+const signupValidationRules = [
+    body('email').isEmail().withMessage('please Enter a valid email').normalizeEmail(),
+    body('password').notEmpty().withMessage('please enter a password'),
+    body('password').isLength({ min: 8})
+]
+const loginValidationRules = [
+    body('email').trim().isEmail().withMessage('please Enter a valid email'),
+    body('password').notEmpty().withMessage('please enter a password'),
+]
 function createToken(id) {
     return jwt.sign({id}, 'secret',{expiresIn: maxAge} )
 }
 
+
 const signup_post = async (req, res) => {
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty()) {
+        return res.status(400).json({success: false, errors: errors.array() })
+    }
 
     const {email, password} = req.body;
-    const errors = {}
-
-    if(!email) {
-        errors.email = 'please enter an email'
-        return res.status(400).json({success: false, errors })
-    } else if(!isValidEmail(email)){
-        errors.email = 'please enter a valid email'
-    }
-    if(!password) {
-        errors.password = 'please enter an password'
-        return res.status(400).json({success: false, errors})
-    }
-    if(password.length < 7) {
-        errors.password = 'password must be at least 8 character'
-        return res.status(400).json({success: false, errors})
-    }
-    if(Object.keys(errors).length > 0) {
-        return res.status(400).json({success: false, errors})
-    }
 
     try {
         const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email])
         if(rows.length > 0) {
-            errors.email = 'email already exist'
-            return res.status(400).json({success: false, errors})
+            
+            return res.status(400).json({
+                success: false,
+                errors: [{path: 'email', msg:'email already exist'}]
+            })
         }
         const salt = 10;
         const hashedPassword = await bcrypt.hash(password, salt)
@@ -58,31 +57,24 @@ const signup_post = async (req, res) => {
 
 const login_post = async (req, res) => {
 
-    const {email, password} = req.body;
-    const errors = {}
+    const errors = validationResult(req)
 
-    if(!email) {
-        errors.email = 'please enter an email'
-        return res.status(400).json({success:false, errors})
-    } else if(!isValidEmail(email)) {
-        errors.email = 'please enter a valid email'
-        return res.status(400).json({success:false, errors})
+    if(!errors.isEmpty()) {
+        return res.status(400).json({success: false,errors: errors.array()})
     }
-    if(!password) {
-        errors.password = 'please enter an password'
-        return res.status(400).json({success: false, errors})
-    }
-    if(password.length < 8) {
-        errors.password = 'password must be atleast 8 characters'
-    }
+
+    const {email, password} = req.body;
 
     try {
         const [rows] = await pool.query(
             'SELECT * FROM users WHERE email = ?', [email]
         )
         if(rows.length === 0) {
-            errors.email = "email not found"
-            return res.status(400).json({success: false, errors})
+            
+            return res.status(400).json({
+                success: false,
+                errors: [{path: 'email', msg: 'email not found'}]
+            })
         }
 
         const user = rows[0]
@@ -90,8 +82,10 @@ const login_post = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password)
 
         if(!isMatch) {
-            errors.password = 'wrong password'
-            return res.status(400).json({success: false, errors})
+            
+            return res.status(400).json({
+                success: false,
+                errors: [{path: 'password', msg:'wrong password'}]})
         }
 
         const token = createToken(user.id)
@@ -109,4 +103,4 @@ const logout = (req,res) => {
     res.json({success:true})
 }
 
-module.exports = {signup_post, login_post,logout}
+module.exports = {signup_post, login_post,logout, loginValidationRules, signupValidationRules}
