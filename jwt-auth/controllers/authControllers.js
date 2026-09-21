@@ -1,12 +1,21 @@
 const { pool } = require('../config/db')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const rateLimit = require('express-rate-limit')
 const {body, validationResult} = require('express-validator')
+
 const maxAge = 30 * 24 * 60 * 60;
 
 // function isValidEmail(email) {
 //     return /^[^\s@]+@[^\s@]+\.com$/.test(email)
 // }
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 5,
+    message: {success: false, message:'too many attemps. Please try again late'}
+
+})
+
 const signupValidationRules = [
     body('email').isEmail().withMessage('please Enter a valid email').normalizeEmail(),
     body('password').notEmpty().withMessage('please enter a password'),
@@ -103,4 +112,4 @@ const logout = (req,res) => {
     res.json({success:true})
 }
 
-module.exports = {signup_post, login_post,logout, loginValidationRules, signupValidationRules}
+module.exports = {signup_post, login_post,logout, loginLimiter, loginValidationRules, signupValidationRules}

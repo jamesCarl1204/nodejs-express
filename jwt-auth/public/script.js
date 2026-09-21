@@ -88,6 +88,10 @@ loginSubmit.addEventListener('click', async (e) => {
 
     const data = await response.json()
 
+    if(response.status === 429) {
+        document.getElementById('limit-err').textContent = data.message;
+        return
+    }
     if(data.errors) {
         data.errors.forEach(err => {
             if (err.path === 'email')  loginEmailErr.textContent = err.msg
